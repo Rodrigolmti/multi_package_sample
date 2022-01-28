@@ -1,0 +1,56 @@
+name: multi_package_sample
+
+versioning:
+  mode: independent
+
+packages:
+  - app/*
+  - infrastructure/**
+  - features/**
+
+scripts:
+  lint:all:
+    run: melos run analyze && melos run format
+    description: Run all static analysis checks
+
+  format:
+    run: melos exec -c 6 --fail-fast -- flutter format .
+  analyze:
+    run: melos exec -c 3 flutter analyze
+    description: Run analyze for Flutter packages in this project
+
+  test:
+    run: melos run test:selective --no-select
+    description: Run all Flutter tests in this project.
+  test:selective:
+    run: |
+      melos exec -c 6 --fail-fast -- \
+        "flutter test --no-pub --reporter compact --no-test-assets"
+    description: Run `flutter test` for a specific package.
+    select-package:
+      dir-exists:
+        - test
+      ignore:
+        - "*example*"
+
+  install:
+    run: melos exec -c 6 flutter pub get
+    description: Install all dependencies
+  clean:
+    run: melos exec -c 6 -- flutter clean && melos run install
+    description: Clean Flutter packages in this project and run bootstrap
+
+  format:check:
+    run: melos exec -c 6 --fail-fast -- flutter format --set-exit-if-changed --dry-run .
+  codegen:
+    run: melos exec -c 1 --depends-on="build_runner" -- flutter pub run build_runner build --delete-conflicting-outputs
+    description: Run code generation using build_runner
+  codegen:selective:
+    run: melos exec -c 1 --depends-on="build_runner" -- flutter pub run build_runner build --delete-conflicting-outputs
+    description: Run code generation using build_runner in a specific package
+    select-package:
+      depends-on: "build_runner"
+
+environment:
+  sdk: ">=2.12.0-0 <3.0.0"
+  flutter: ">=2.0.0"

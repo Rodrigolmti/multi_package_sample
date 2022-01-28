@@ -1,0 +1,6 @@
+{
+    "login_screen": {
+        "title": "Welcome, press SSO to authenticate",
+        "action": "SSO"
+    }
+}

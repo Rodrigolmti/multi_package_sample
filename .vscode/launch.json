@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug",
+      "program": "app/lib/environments/staging/staging_main.dart",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug",
+    },
+    {
+      "name": "Release debug",
+      "program": "app/lib/environments/production/production_main.dart",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug",
+    }
+  ]
+}
